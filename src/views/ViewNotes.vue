@@ -1,73 +1,80 @@
 <template>
   <div class="notes">
 
-    <div class="card has-background-success-dark p-4 mb-5">
+    <AddEditNote v-model="newNote">
+      <template #buttons>
+        <button
+            @click="addNote"
+            :disabled="!newNote"
+            class="button is-link has-background-success"
+          >
+            Add New Note
+          </button>
+      </template>
+    </AddEditNote>
+
+    <!-- <div class="card has-background-success-dark p-4 mb-5">
       <div class="field">
         <div class="control">
-          <textarea v-model="newNote" class="textarea" placeholder="Add a new note" ref="newNoteRef" />
+          <textarea
+            v-model="newNote"
+            class="textarea"
+            placeholder="Add a new note"
+            ref="newNoteRef"
+          />
         </div>
       </div>
 
       <div class="field is-grouped is-grouped-right">
         <div class="control">
-          <button @click="addNote" :disabled="!newNote" class="button is-link has-background-success">Add New Note</button>
+          <button
+            @click="addNote"
+            :disabled="!newNote"
+            class="button is-link has-background-success"
+          >
+            Add New Note
+          </button>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <Note v-for="note in notes" :key="note.id" :note="note" @deleteClicked="deleteNote" />
-
+    <Note
+      v-for="note in storeNotes.notes"
+      :key="note.id"
+      :note="note"
+    />
   </div>
 </template>
 
 <script setup>
-
 /*
   imports
 */
 
-import { ref } from 'vue'
-import Note from '@/components/Notes/Note.vue'
+import { ref } from "vue";
+import Note from "@/components/Notes/Note.vue";
+import AddEditNote from "../components/Notes/AddEditNote.vue";
+import useStoreNotes from "@/stores/storeNotes";
+
+/*
+  store
+*/
+
+const storeNotes = useStoreNotes();
 
 /*
   notes
 */
 
-const newNote = ref('')
-const newNoteRef = ref(null)
-
-const notes = ref([
-  {
-    id: 'id1',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eget vestibulum erat. Integer vitae nunc quis nisl dignissim porttitor. Phasellus.'
-  },
-  {
-    id: 'id2',
-    content: 'This is a shorter note!'
-  }
-])
+const newNote = ref("");
+const newNoteRef = ref(null);
 
 const addNote = () => {
-  let currentDate = new Date().getTime(),
-    id = currentDate.toString()
+  storeNotes.addNote(newNote.value);
 
-  let note = {
-    id,
-    content: newNote.value
-  }
+  newNote.value = "";
 
-  notes.value.unshift(note)
-  newNote.value = ''
-
-  newNoteRef.value.focus()
-}
-
-/*
-  delete note 
-*/
-
-const deleteNote = (id) => {
-  notes.value = notes.value.filter((note) => { return note.id !== id })
-}
+  newNoteRef.value.focus();
+};
 
 </script>
