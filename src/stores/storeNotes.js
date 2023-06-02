@@ -31,6 +31,10 @@ const useStoreNotes = defineStore("storeNotes", {
     deleteNote(id) {
         this.notes = this.notes.filter(note => { return note.id !== id })
     },
+    updateNote(id, content) {
+      let index = this.notes.findIndex((note) => { return note.id === id })
+      this.notes[index].content = content
+    }
   },
   getters: {
     getNoteContent: (state) => {
