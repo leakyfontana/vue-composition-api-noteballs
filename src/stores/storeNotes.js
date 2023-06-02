@@ -41,6 +41,16 @@ const useStoreNotes = defineStore("storeNotes", {
       return (id) => {
         return state.notes.filter((note) => { return note.id === id })[0].content
       }
+    },
+    totalNotesCount: (state) => {
+      return state.notes.length
+    },
+    totalCharacterCount: (state) => {
+      let count = 0
+      state.notes.forEach((note) => {
+        count += note.content.length
+      })
+      return count
     }
   }
 });
