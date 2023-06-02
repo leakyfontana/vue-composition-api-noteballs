@@ -1,4 +1,3 @@
-// stores/counter.js
 import { defineStore } from "pinia";
 
 const useStoreNotes = defineStore("storeNotes", {
@@ -33,6 +32,13 @@ const useStoreNotes = defineStore("storeNotes", {
         this.notes = this.notes.filter(note => { return note.id !== id })
     },
   },
+  getters: {
+    getNoteContent: (state) => {
+      return (id) => {
+        return state.notes.filter((note) => { return note.id === id })[0].content
+      }
+    }
+  }
 });
 
 export default useStoreNotes;
